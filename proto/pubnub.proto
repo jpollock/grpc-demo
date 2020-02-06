@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+import "google/protobuf/struct.proto";
+import "pubnub.types.proto";
+
+package pubnub;
+
+service PubSub {
+  // Send a message
+  rpc Publish (Message) returns (PublishResponse) {}
+
+  // Send a stream of messages
+  rpc StreamingPublish (stream Message) returns (stream PublishResponse) {}
+
+  // Subscribe to messages on a channel
+  rpc Subscribe (Subscription) returns (stream Message) {}
+}
+
+message Message {
+  string channel             = 1;
+  google.protobuf.Value data = 2;
+}

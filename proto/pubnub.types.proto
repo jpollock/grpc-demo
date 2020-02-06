@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package pubnub;
+
+message Subscription {
+  string channel = 1;
+}
+
+message PublishResponse {
+  enum Status {
+    SUCCESS = 0;
+    ERROR   = 1;
+  }
+
+  string message      = 1;
+  Timetoken timetoken = 2;
+  Status status       = 3;
+}
+
+message Timetoken {
+  uint64 t = 1;
+  uint32 r = 2;
+}
+
+message Location {
+  float latitude  = 1;
+  float longitude = 2;
+}

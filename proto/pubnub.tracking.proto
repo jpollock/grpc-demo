@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+import "google/protobuf/struct.proto";
+import "pubnub.types.proto";
+
+package pubnub;
+
+service DriverTracking {
+  // Send a stream of driver tracking messages
+  rpc Publish (stream DriverTrackingEnvelope) returns (stream PublishResponse) {}
+
+  // Subscribe to driver tracking messages on a channel
+  rpc Subscribe (Subscription) returns (stream DriverTrackingEnvelope) {}
+}
+
+service LocationTracking {
+  // Send a stream of location tracking messages
+  rpc Publish (stream LocationTrackingEnvelope) returns (stream PublishResponse) {}
+
+  // Subscribe to location tracking messages on a channel
+  rpc Subscribe (Subscription) returns (stream LocationTrackingEnvelope) {}
+}
+
+message DriverTrackingEnvelope {
+  string channel             = 1;
+  DriverTrackingMessage data = 2;
+}
+
+message DriverTrackingMessage {
+  enum DriverStatus {
+    CUSTOM                  = 0;
+    UNAVAILABLE             = 1;
+    WAITING_FOR_ASSIGNMENT  = 2;
+    EN_ROUTE_TO_PICKUP      = 3;
+    EN_ROUTE_TO_DELIVER     = 4;
+  }
+
+  string driver_id                    = 1;
+  string order_id                     = 2;
+  DriverStatus driver_status          = 3;
+  google.protobuf.Value custom_status = 4;
+  Location location                   = 5;
+  float heading                       = 6;
+  float velocity                      = 7;
+  string road                         = 8;
+  google.protobuf.Value metadata      = 9;
+}
+
+message LocationTrackingEnvelope {
+  string channel               = 1;
+  LocationTrackingMessage data = 2;
+}
+
+message LocationTrackingMessage {
+  enum TrackingStatus {
+    CUSTOM              = 0;
+    READY_FOR_PICKUP    = 1;
+    EN_ROUTE_TO_DELIVER = 2;
+    DELIVERED           = 3;
+    UNABLE_TO_DELIVER   = 4;
+    RETURNING           = 5;
+    CLOSED              = 6;
+    EXCEPTION           = 7;
+  }
+
+  string tracking_id                  = 1;
+  TrackingStatus tracking_status      = 2;
+  google.protobuf.Value custom_status = 3;
+  Location location                   = 4;
+  google.protobuf.Value metadata      = 5;
+}

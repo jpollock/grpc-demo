@@ -1,0 +1,21 @@
+version: '3'
+services:
+  web-server:
+    build:
+      context: ./nginx
+      dockerfile: ./web.Dockerfile
+    image: helloworld/web-server
+    ports:
+      - "80:80"
+  envoy:
+    build:
+        context: ./envoy
+        dockerfile: ./envoy.Dockerfile
+    image: helloworld/envoy
+    ports:
+        - "8080:8080"
+  #go:
+  #  build:
+  #    context: ./go
+  #    dockerfile: ./go.Dockerfile
+  #  image: helloworld/go
