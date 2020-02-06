@@ -7,6 +7,7 @@ import (
 	"math"
 	"math/rand"
 	"time"
+	"os"
 
 	pb "github.com/jpollock/grpc-demo/go/pb.go"
 
@@ -18,12 +19,15 @@ const (
 	//address = "0.0.0.0:50051"
 	address = "pubnub-arke.prd-eks-bom-1.prd-eks.ps.pn:80"
 	// address = "13.56.150.134:50051"
-	pubkey  = "<insert publish key>"
-	subkey  = "<insert subscribe key>"
 	channel = "demo"
 )
 
+
 func main() {
+	pubkey  := os.Getenv("PUBLISH_KEY")
+	subkey  := os.Getenv("SUBSCRIBE_KEY")
+	
+
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
